@@ -13,9 +13,6 @@ crash.*.log
 *.tfvars
 *.tfvars.json
 
-# Except the example tfvars file that should be committed
-!terraform.tfvars
-
 # Include override files you wish to add to version control
 # !override.tf
 # !override.tf.json

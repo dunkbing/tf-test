@@ -28,12 +28,20 @@ resource "aws_ecs_task_definition" "app" {
 
   container_definitions = jsonencode([
     {
-      name        = var.app_name
-      image       = var.container_image
-      essential   = true
-      cpu         = var.cpu
-      memory      = var.memory
-      environment = []
+      name      = var.app_name
+      image     = var.container_image
+      essential = true
+      cpu       = var.cpu
+      memory    = var.memory
+
+      # Use environmentFiles to load from S3
+      environmentFiles = [
+        {
+          value = "arn:aws:s3:::${aws_s3_bucket.env_bucket.bucket}/.env"
+          type  = "s3"
+        }
+      ]
+
       portMappings = [
         {
           containerPort = var.container_port

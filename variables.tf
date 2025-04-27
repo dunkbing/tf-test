@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "The AWS region to deploy resources"
   type        = string
-  default     = "us-east-1"
+  default     = "us-west-1"
 }
 
 variable "app_name" {
@@ -13,13 +13,13 @@ variable "app_name" {
 variable "environment" {
   description = "Environment name (e.g., dev, staging, prod)"
   type        = string
-  default     = "dev"
+  default     = "playground"
 }
 
 variable "container_port" {
   description = "Port exposed by the container"
   type        = number
-  default     = 3000
+  default     = 8080
 }
 
 variable "cpu" {

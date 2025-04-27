@@ -3,7 +3,6 @@
 set -e
 
 # Configuration
-AWS_REGION="us-east-1"  # Change to your preferred region
 APP_NAME="bun-app"      # Should match your app_name in terraform.tfvars
 
 # Colors for better output
@@ -19,7 +18,7 @@ terraform init
 
 # Step 2: Deploy the infrastructure
 echo -e "${GREEN}Deploying the infrastructure...${NC}"
-terraform apply -auto-approve
+terraform apply
 
 # Step 3: Get the ALB DNS name
 ALB_DNS=$(terraform output -raw alb_dns_name)

@@ -36,6 +36,7 @@ resource "aws_lb_target_group" "app" {
   }
 }
 
+# HTTP listener (port 80)
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = 80
@@ -45,4 +46,25 @@ resource "aws_lb_listener" "http" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.app.arn
   }
+}
+
+# HTTPS listener (port 443) - Will be created after certificate validation
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"  # Modern, secure policy
+
+  # Wait for certificate validation
+  certificate_arn   = aws_acm_certificate_validation.cert.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
+  }
+
+  # This ensures the HTTPS listener is only created after the certificate is validated
+  depends_on = [
+    aws_acm_certificate_validation.cert
+  ]
 }
