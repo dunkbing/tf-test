@@ -1,38 +1,38 @@
 resource "aws_ecs_cluster" "main" {
-  name = "${var.app_name}-cluster"
+  name = "${var.app_name}-${local.environment}-cluster"
 
   tags = {
-    Name        = "${var.app_name}-cluster"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-cluster"
+    Environment = local.environment
   }
 }
 
 resource "aws_cloudwatch_log_group" "ecs" {
-  name              = "/ecs/${var.app_name}"
+  name              = "/ecs/${var.app_name}-${local.environment}"
   retention_in_days = 30
 
   tags = {
-    Name        = "${var.app_name}-log-group"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-log-group"
+    Environment = local.environment
   }
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = var.app_name
+  family                   = "${var.app_name}-${local.environment}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.cpu
-  memory                   = var.memory
+  cpu                      = local.cpu_value
+  memory                   = local.memory_value
   execution_role_arn       = aws_iam_role.ecs_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
 
   container_definitions = jsonencode([
     {
-      name      = var.app_name
+      name      = "${var.app_name}-${local.environment}"
       image     = var.container_image
       essential = true
-      cpu       = var.cpu
-      memory    = var.memory
+      cpu       = local.cpu_value
+      memory    = local.memory_value
 
       # Use environmentFiles to load from S3
       environmentFiles = [
@@ -61,16 +61,16 @@ resource "aws_ecs_task_definition" "app" {
   ])
 
   tags = {
-    Name        = "${var.app_name}-task-def"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-task-def"
+    Environment = local.environment
   }
 }
 
 resource "aws_ecs_service" "app" {
-  name            = "${var.app_name}-service"
+  name            = "${var.app_name}-${local.environment}-service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.app.arn
-  desired_count   = var.desired_count
+  desired_count   = local.desired_count_value
   launch_type     = "FARGATE"
 
   network_configuration {
@@ -81,7 +81,7 @@ resource "aws_ecs_service" "app" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.app.arn
-    container_name   = var.app_name
+    container_name   = "${var.app_name}-${local.environment}"
     container_port   = var.container_port
   }
 
@@ -90,7 +90,7 @@ resource "aws_ecs_service" "app" {
   ]
 
   tags = {
-    Name        = "${var.app_name}-service"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-service"
+    Environment = local.environment
   }
 }

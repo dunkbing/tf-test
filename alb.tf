@@ -1,20 +1,20 @@
 resource "aws_lb" "main" {
-  name               = "${var.app_name}-alb"
+  name               = "${var.app_name}-${local.environment}-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
   subnets            = aws_subnet.public[*].id
 
-  enable_deletion_protection = false
+  enable_deletion_protection = local.environment == "production" ? true : false
 
   tags = {
-    Name        = "${var.app_name}-alb"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-alb"
+    Environment = local.environment
   }
 }
 
 resource "aws_lb_target_group" "app" {
-  name        = "${var.app_name}-tg"
+  name        = "${var.app_name}-${local.environment}-tg"
   port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
@@ -31,8 +31,8 @@ resource "aws_lb_target_group" "app" {
   }
 
   tags = {
-    Name        = "${var.app_name}-tg"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-tg"
+    Environment = local.environment
   }
 }
 

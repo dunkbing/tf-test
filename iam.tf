@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecs_execution_role" {
-  name = "${var.app_name}-ecs-execution-role"
+  name = "${var.app_name}-${local.environment}-ecs-execution-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -15,8 +15,8 @@ resource "aws_iam_role" "ecs_execution_role" {
   })
 
   tags = {
-    Name        = "${var.app_name}-ecs-execution-role"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-ecs-execution-role"
+    Environment = local.environment
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  name = "${var.app_name}-ecs-task-role"
+  name = "${var.app_name}-${local.environment}-ecs-task-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -42,14 +42,14 @@ resource "aws_iam_role" "ecs_task_role" {
   })
 
   tags = {
-    Name        = "${var.app_name}-ecs-task-role"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-ecs-task-role"
+    Environment = local.environment
   }
 }
 
 resource "aws_iam_policy" "s3_env_access_for_execution" {
-  name        = "${var.app_name}-s3-env-access-execution"
-  description = "Policy to allow ECS execution role to access environment variables in S3"
+  name        = "${var.app_name}-${local.environment}-s3-env-access-execution"
+  description = "Policy to allow ECS execution role to access environment variables in S3 for ${local.environment}"
 
   policy = jsonencode({
     Version = "2012-10-17"

@@ -18,6 +18,17 @@ output "container_image" {
   value       = var.container_image
 }
 
+output "environment" {
+  description = "Current environment"
+  value       = local.environment
+}
+
+# Output the full domain name
+output "fqdn" {
+  description = "Fully qualified domain name for the application"
+  value       = local.fqdn
+}
+
 # Output the validation records for configuration in Cloudflare
 output "certificate_validation_details" {
   description = "DNS records required for certificate validation"
@@ -38,10 +49,15 @@ output "domain_name" {
 
 output "subdomain" {
   description = "Subdomain for the application"
-  value       = var.subdomain
+  value       = local.subdomain_value
 }
 
 output "certificate_arn" {
   description = "ARN of the ACM certificate"
   value       = aws_acm_certificate.cert.arn
+}
+
+output "s3_env_bucket" {
+  description = "S3 bucket for environment variables"
+  value       = aws_s3_bucket.env_bucket.bucket
 }

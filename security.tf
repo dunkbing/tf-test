@@ -1,6 +1,6 @@
 resource "aws_security_group" "alb" {
-  name        = "${var.app_name}-alb-sg"
-  description = "Controls access to the ALB"
+  name        = "${var.app_name}-${local.environment}-alb-sg"
+  description = "Controls access to the ALB for ${local.environment} environment"
   vpc_id      = aws_vpc.main.id
 
   ingress {
@@ -27,14 +27,14 @@ resource "aws_security_group" "alb" {
   }
 
   tags = {
-    Name        = "${var.app_name}-alb-sg"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-alb-sg"
+    Environment = local.environment
   }
 }
 
 resource "aws_security_group" "ecs_tasks" {
-  name        = "${var.app_name}-ecs-tasks-sg"
-  description = "Controls access to the ECS tasks"
+  name        = "${var.app_name}-${local.environment}-ecs-tasks-sg"
+  description = "Controls access to the ECS tasks for ${local.environment} environment"
   vpc_id      = aws_vpc.main.id
 
   ingress {
@@ -52,7 +52,7 @@ resource "aws_security_group" "ecs_tasks" {
   }
 
   tags = {
-    Name        = "${var.app_name}-ecs-tasks-sg"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-ecs-tasks-sg"
+    Environment = local.environment
   }
 }

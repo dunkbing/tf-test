@@ -1,18 +1,4 @@
-variable "domain_name" {
-  description = "The domain name for your application"
-  type        = string
-  default     = "eagleload.com"
-}
-
-variable "subdomain" {
-  description = "The subdomain for your application"
-  type        = string
-  default     = "playground"
-}
-
-locals {
-  fqdn = "${var.subdomain}.${var.domain_name}"
-}
+# ACM Certificate Configuration
 
 # Create an SSL certificate
 resource "aws_acm_certificate" "cert" {
@@ -29,8 +15,8 @@ resource "aws_acm_certificate" "cert" {
   }
 
   tags = {
-    Name        = "${var.app_name}-certificate"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-certificate"
+    Environment = local.environment
   }
 
   lifecycle {

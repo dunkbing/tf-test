@@ -4,8 +4,8 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name        = "${var.app_name}-vpc"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-vpc"
+    Environment = local.environment
   }
 }
 
@@ -17,8 +17,8 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name        = "${var.app_name}-public-subnet-${count.index}"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-public-subnet-${count.index}"
+    Environment = local.environment
   }
 }
 
@@ -29,8 +29,8 @@ resource "aws_subnet" "private" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name        = "${var.app_name}-private-subnet-${count.index}"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-private-subnet-${count.index}"
+    Environment = local.environment
   }
 }
 
@@ -38,8 +38,8 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = "${var.app_name}-igw"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-igw"
+    Environment = local.environment
   }
 }
 
@@ -52,8 +52,8 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name        = "${var.app_name}-public-route-table"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-public-route-table"
+    Environment = local.environment
   }
 }
 
@@ -67,8 +67,8 @@ resource "aws_eip" "nat" {
   vpc = true
 
   tags = {
-    Name        = "${var.app_name}-nat-eip"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-nat-eip"
+    Environment = local.environment
   }
 }
 
@@ -77,8 +77,8 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[0].id
 
   tags = {
-    Name        = "${var.app_name}-nat-gateway"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-nat-gateway"
+    Environment = local.environment
   }
 }
 
@@ -91,8 +91,8 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name        = "${var.app_name}-private-route-table"
-    Environment = var.environment
+    Name        = "${var.app_name}-${local.environment}-private-route-table"
+    Environment = local.environment
   }
 }
 
