@@ -68,7 +68,7 @@ terraform init
 
 # Step 3: Deploy the infrastructure
 echo -e "${GREEN}Deploying the infrastructure for $ENVIRONMENT environment...${NC}"
-terraform apply
+terraform apply -var="environment=$ENVIRONMENT"
 
 # Step 4: Get the ALB DNS name
 ALB_DNS=$(terraform output -raw alb_dns_name)

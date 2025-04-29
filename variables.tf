@@ -26,7 +26,7 @@ variable "cpu" {
   type        = map(number)
   default = {
     playground  = 256
-    production = 512
+    production = 1024
   }
 }
 
@@ -35,7 +35,7 @@ variable "memory" {
   type        = map(number)
   default = {
     playground  = 512
-    production = 1024
+    production = 2048
   }
 }
 
@@ -51,7 +51,7 @@ variable "desired_count" {
 variable "container_image" {
   description = "The Docker Hub image to deploy (including tag)"
   type        = string
-  default     = "securiwiser/eagleload:c74ac5fd"
+  default     = "securiwiser/eagleload:553e7d2c"
 }
 
 # Domain configuration
