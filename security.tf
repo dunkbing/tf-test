@@ -1,7 +1,7 @@
 resource "aws_security_group" "alb" {
   name        = "${var.app_name}-${local.environment}-alb-sg"
   description = "Controls access to the ALB for ${local.environment} environment"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     from_port   = 80
@@ -35,7 +35,7 @@ resource "aws_security_group" "alb" {
 resource "aws_security_group" "ecs_tasks" {
   name        = "${var.app_name}-${local.environment}-ecs-tasks-sg"
   description = "Controls access to the ECS tasks for ${local.environment} environment"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     from_port       = var.container_port

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Enable debugging and error tracing
-set -ex
+set -e
 
 # Default configuration
 AWS_REGION="us-west-1"  # Your AWS region
