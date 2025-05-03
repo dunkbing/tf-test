@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "app" {
-  name                 = "${var.app_name}"
+  name                 = "${var.app_name}-${local.environment}"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -12,7 +12,8 @@ resource "aws_ecr_repository" "app" {
   }
 
   tags = {
-    Name = "${var.app_name}-ecr"
+    Name        = "${var.app_name}-${local.environment}-ecr"
+    Environment = local.environment
   }
 }
 
@@ -40,7 +41,7 @@ resource "aws_ecr_lifecycle_policy" "app" {
 
 # Add ECR repository URL to outputs
 output "ecr_repository_url" {
-  description = "URL of the ECR repository"
+  description = "URL of the ECR repository for the current environment"
   value       = aws_ecr_repository.app.repository_url
 }
 

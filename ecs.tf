@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = jsonencode([
     {
       name      = "${var.app_name}-${local.environment}"
-      image     = var.container_image
+      image     = local.container_image_value
       essential = true
       cpu       = local.cpu_value
       memory    = local.memory_value

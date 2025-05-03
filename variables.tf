@@ -51,8 +51,8 @@ variable "desired_count" {
 variable "container_image" {
   description = "The Docker Hub image to deploy (including tag)"
   type        = string
-  # default     = "securiwiser/eagleload:v1.1"
-  default     = "080021083897.dkr.ecr.us-west-1.amazonaws.com/bun-app:v1.9"
+  default     = "080021083897.dkr.ecr.us-west-1.amazonaws.com/bun-app"
+  # default     = "080021083897.dkr.ecr.us-west-1.amazonaws.com/bun-app:v1.9"
 }
 
 # Domain configuration
@@ -90,6 +90,13 @@ locals {
   memory_value = var.memory[local.environment]
   desired_count_value = var.desired_count[local.environment]
   subdomain_value = var.subdomain[local.environment]
+
+  # Extract the base ECR registry from the container_image variable
+  # This assumes the format is "registry/image:tag"
+  ecr_registry = split("/", var.container_image)[0]
+
+  # Construct the environment-specific container image
+  container_image_value = "${local.ecr_registry}/${var.app_name}-${local.environment}:v1"
 
   # Full domain name
   fqdn = "${local.subdomain_value}.${var.domain_name}"
