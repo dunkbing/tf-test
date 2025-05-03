@@ -51,7 +51,8 @@ variable "desired_count" {
 variable "container_image" {
   description = "The Docker Hub image to deploy (including tag)"
   type        = string
-  default     = "securiwiser/eagleload:553e7d2c"
+  # default     = "securiwiser/eagleload:v1.1"
+  default     = "080021083897.dkr.ecr.us-west-1.amazonaws.com/bun-app:v1.9"
 }
 
 # Domain configuration
