@@ -96,7 +96,7 @@ locals {
   ecr_registry = split("/", var.container_image)[0]
 
   # Construct the environment-specific container image
-  container_image_value = "${local.ecr_registry}/${var.app_name}-${local.environment}:v1"
+  container_image_value = "${local.ecr_registry}/${var.app_name}-${local.environment}:v3"
 
   # Full domain name
   fqdn = "${local.subdomain_value}.${var.domain_name}"
