@@ -24,10 +24,10 @@ resource "aws_lb_target_group" "app" {
     path                = "/health"
     protocol            = "HTTP"
     matcher             = "200-302"
-    interval            = 60  # Increased from 30
-    timeout             = 30  # Increased from 5
-    healthy_threshold   = 2   # Reduced from 3
-    unhealthy_threshold = 5   # Increased from 3
+    interval            = 300
+    timeout             = 30
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
   }
 
   tags = {
@@ -53,10 +53,10 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.main.arn
   port              = 443
   protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"  # Modern, secure policy
+  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01" # Modern, secure policy
 
   # Wait for certificate validation
-  certificate_arn   = aws_acm_certificate_validation.cert.certificate_arn
+  certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
 
   default_action {
     type             = "forward"

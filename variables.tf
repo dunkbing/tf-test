@@ -25,7 +25,7 @@ variable "cpu" {
   description = "CPU units for the container"
   type        = map(number)
   default = {
-    playground  = 256
+    playground = 256
     production = 1024
   }
 }
@@ -34,7 +34,7 @@ variable "memory" {
   description = "Memory for the container in MiB"
   type        = map(number)
   default = {
-    playground  = 512
+    playground = 512
     production = 2048
   }
 }
@@ -43,8 +43,8 @@ variable "desired_count" {
   description = "Number of instances of the task to run"
   type        = map(number)
   default = {
-    playground  = 1
-    production = 2
+    playground = 1
+    production = 1
   }
 }
 
@@ -66,7 +66,7 @@ variable "subdomain" {
   description = "The subdomain for your application"
   type        = map(string)
   default = {
-    playground  = "playground"
+    playground = "playground"
     production = "api-v2"
   }
 }
@@ -86,10 +86,10 @@ locals {
   validate_env = index(local.valid_environments, local.environment) >= 0 ? local.environment : "invalid"
 
   # CPU and memory values based on environment
-  cpu_value = var.cpu[local.environment]
-  memory_value = var.memory[local.environment]
+  cpu_value           = var.cpu[local.environment]
+  memory_value        = var.memory[local.environment]
   desired_count_value = var.desired_count[local.environment]
-  subdomain_value = var.subdomain[local.environment]
+  subdomain_value     = var.subdomain[local.environment]
 
   # Extract the base ECR registry from the container_image variable
   # This assumes the format is "registry/image:tag"
