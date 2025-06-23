@@ -26,7 +26,7 @@ variable "cpu" {
   type        = map(number)
   default = {
     playground = 256
-    production = 1024
+    production = 512
   }
 }
 
@@ -35,7 +35,7 @@ variable "memory" {
   type        = map(number)
   default = {
     playground = 512
-    production = 2048
+    production = 1024
   }
 }
 
@@ -96,7 +96,7 @@ locals {
   ecr_registry = split("/", var.container_image)[0]
 
   # Construct the environment-specific container image
-  container_image_value = "${local.ecr_registry}/${var.app_name}-${local.environment}:v3"
+  container_image_value = "${local.ecr_registry}/${var.app_name}-${local.environment}:v68"
 
   # Full domain name
   fqdn = "${local.subdomain_value}.${var.domain_name}"
