@@ -71,6 +71,34 @@ variable "subdomain" {
   }
 }
 
+# Database configuration
+variable "db_instance_class" {
+  description = "RDS instance class for the database"
+  type        = map(string)
+  default = {
+    playground = "db.t3.micro"
+    production = "db.t3.small"
+  }
+}
+
+variable "db_allocated_storage" {
+  description = "Allocated storage for the database in GB"
+  type        = map(number)
+  default = {
+    playground = 20
+    production = 20
+  }
+}
+
+variable "db_max_allocated_storage" {
+  description = "Maximum allocated storage for the database in GB"
+  type        = map(number)
+  default = {
+    playground = 50
+    production = 100
+  }
+}
+
 # Environment-specific variable lookups
 locals {
   # Get the current Terraform workspace
@@ -96,8 +124,18 @@ locals {
   ecr_registry = split("/", var.container_image)[0]
 
   # Construct the environment-specific container image
-  container_image_value = "${local.ecr_registry}/${var.app_name}-${local.environment}:v68"
+  container_image_value = "${local.ecr_registry}/${var.app_name}-${local.environment}:v81"
 
   # Full domain name
   fqdn = "${local.subdomain_value}.${var.domain_name}"
+
+  # Database configuration
+  db_instance_class = var.db_instance_class[local.environment]
+  db_allocated_storage = var.db_allocated_storage[local.environment]
+  db_max_allocated_storage = var.db_max_allocated_storage[local.environment]
+
+  # Database credentials (you should change these!)
+  db_name = "${replace(var.app_name, "-", "_")}_${local.environment}"
+  db_username = "dbadmin"
+  db_password = local.environment == "production" ? "BeBQ3a07Yn7vip!" : "playground123!"
 }

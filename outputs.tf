@@ -61,3 +61,37 @@ output "s3_env_bucket" {
   description = "S3 bucket for environment variables"
   value       = aws_s3_bucket.env_bucket.bucket
 }
+
+# Database outputs
+output "db_endpoint" {
+  description = "PostgreSQL database endpoint"
+  value       = aws_db_instance.postgres.endpoint
+}
+
+output "db_name" {
+  description = "PostgreSQL database name"
+  value       = aws_db_instance.postgres.db_name
+}
+
+output "db_username" {
+  description = "PostgreSQL database username"
+  value       = aws_db_instance.postgres.username
+  sensitive   = true
+}
+
+output "db_password" {
+  description = "PostgreSQL database password"
+  value       = local.db_password
+  sensitive   = true
+}
+
+output "db_port" {
+  description = "PostgreSQL database port"
+  value       = aws_db_instance.postgres.port
+}
+
+output "db_connection_string" {
+  description = "PostgreSQL connection string"
+  value       = "postgresql://${aws_db_instance.postgres.username}:${local.db_password}@${aws_db_instance.postgres.endpoint}/${aws_db_instance.postgres.db_name}"
+  sensitive   = true
+}
